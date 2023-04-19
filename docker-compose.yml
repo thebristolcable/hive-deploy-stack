@@ -70,7 +70,7 @@ services:
       - internal
 
   frontend:
-    image: beabee/frontend:release
+    image: beabee/frontend:feat-762-new-deployment
     restart: unless-stopped
     environment:
       APP_BASE_URL: ${BEABEE_AUDIENCE}
