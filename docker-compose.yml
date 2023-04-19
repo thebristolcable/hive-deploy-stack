@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-base-app: &base-app
-  image: beabee/beabee:release
+  image: beabee/beabee:feat-762-new-deployment
   env_file:
     - stack.env
   networks:
