@@ -11,6 +11,9 @@ x-base-app: &base-app
     driver: gelf
     options:
       gelf-address: "udp://127.0.0.1:12201"
+      env: stack
+  environment:
+    stack=${COMPOSE_PROJECT_NAME}
 
 x-app: &app
   <<: *base-app
