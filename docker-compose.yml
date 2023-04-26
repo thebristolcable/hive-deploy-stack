@@ -1,7 +1,7 @@
 version: '3.4'
 
 x-base-app: &base-app
-  image: beabee/beabee:
+  image: beabee/beabee:v0.1.2
   env_file:
     - stack.env
   networks:
@@ -55,7 +55,7 @@ services:
       - internal
 
   router:
-    image: beabee/router:
+    image: beabee/router:v0.1.2
     restart: unless-stopped
     networks:
       - internal
