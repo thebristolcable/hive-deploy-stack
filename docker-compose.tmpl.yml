@@ -55,7 +55,7 @@ services:
       - internal
 
   router:
-    image: beabee/router:ROUTER_VERSION
+    image: beabee/router:API_VERSION
     restart: unless-stopped
     networks:
       - internal

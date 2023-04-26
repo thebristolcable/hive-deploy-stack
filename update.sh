@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Check if API_VERSION and FRONTEND_VERSION are compatible
-# TODO: check ROUTER_VERSION too
 API_VERSION=$(cat API_VERSION)
 FRONTEND_VERSION=$(cat FRONTEND_VERSION)
 
 echo "API_VERSION: $API_VERSION"
-echo "FREONTEND_VERSION: $FRONTEND_VERSION"
+echo "FRONTEND_VERSION: $FRONTEND_VERSION"
+
+# Check if API_VERSION and FRONTEND_VERSION are compatible
 
 part="major"
 if [ $(./semver.sh get major ${API_VERSION:1}) -eq 0 ]; then
@@ -18,7 +18,8 @@ if [ $(./semver.sh get $part ${API_VERSION:1}) -ne $(./semver.sh get $part ${FRO
     exit
 fi
 
+# Update docker-compose.yml with new versions
+
 cat docker-compose.tmpl.yml |
     sed "s/API_VERSION/$API_VERSION/" |
-    sed "s/FRONTEND_VERSION/$FRONTEND_VERSION/" |
-    sed "s/ROUTER_VERSION/$(cat ROUTER_VERSION)/" > docker-compose.yml
+    sed "s/FRONTEND_VERSION/$FRONTEND_VERSION/" > docker-compose.yml
