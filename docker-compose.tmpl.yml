@@ -7,7 +7,6 @@ x-base-app: &base-app
   networks:
     - internal
     - db-network
-    - graylog_ingress
   logging:
     driver: gelf
     options:
@@ -101,8 +100,6 @@ networks:
   internal:
     driver: bridge
   db-network:
-    external: true
-  graylog_ingress:
     external: true
   traefik-ingress:
     external: true
