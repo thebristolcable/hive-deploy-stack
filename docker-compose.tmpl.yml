@@ -13,7 +13,7 @@ x-base-app: &base-app
       gelf-address: "udp://127.0.0.1:12201"
       env: stack
   environment:
-    stack=${COMPOSE_PROJECT_NAME}
+    stack: ${COMPOSE_PROJECT_NAME}
 
 x-app: &app
   <<: *base-app
@@ -53,8 +53,6 @@ services:
     user: root
     command: 'crond -f -d 7'
     init: true
-    networks:
-      - internal
 
   router:
     image: beabee/router:API_VERSION
@@ -68,8 +66,6 @@ services:
       - tools
     logging:
       driver: none
-    networks:
-      - internal
 
   frontend:
     image: beabee/frontend:FRONTEND_VERSION
