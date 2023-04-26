@@ -11,7 +11,7 @@ x-base-app: &base-app
     driver: gelf
     options:
       gelf-address: "udp://127.0.0.1:12201"
-      env: stack
+      env: stack,service
   environment:
     stack: ${COMPOSE_PROJECT_NAME}
 
@@ -26,16 +26,33 @@ services:
   migration:
     <<: *base-app
     command: 'npm run typeorm migration:run'
+    environment:
+      service: migration
 
-  app: *app
+  app:
+    <<: *app
+    environment:
+      service: app
 
   api_app:
     <<: *app
     command: 'node built/api/app'
+    environment:
+      service: api_app
 
   webhook_app:
     <<: *app
     command: 'node built/webhooks/app'
+    environment:
+      service: webhook_app
+
+  cron:
+    <<: *app
+    user: root
+    command: 'crond -f -d 7'
+    init: true
+    environment:
+      service: cron
 
   img_upload_app:
     image: hascheksolutions/pictshare:72394f17
@@ -45,14 +62,6 @@ services:
     init: true
     volumes:
       - upload_data:/var/www/data
-    networks:
-      - internal
-
-  cron:
-    <<: *app
-    user: root
-    command: 'crond -f -d 7'
-    init: true
 
   router:
     image: beabee/router:v0.1.3
@@ -74,8 +83,6 @@ services:
       APP_BASE_URL: ${BEABEE_AUDIENCE}
       API_BASE_URL: /api/1.0
       CNR_MODE: ${BEABEE_CNR_MODE-}
-    networks:
-      - internal
 
   app_router:
     image: beabee/app-router:latest
