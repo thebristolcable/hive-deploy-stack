@@ -75,7 +75,7 @@ services:
     environment:
       APP_BASE_URL: ${BEABEE_AUDIENCE}
       API_BASE_URL: /api/1.0
-      CNR_MODE: ${BEABEE_CNR_MODE}
+      CNR_MODE: ${BEABEE_CNR_MODE-}
     networks:
       - internal
 
