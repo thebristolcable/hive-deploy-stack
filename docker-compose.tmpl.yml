@@ -12,8 +12,6 @@ x-base-app: &base-app
     options:
       gelf-address: "udp://127.0.0.1:12201"
       env: stack,service
-  environment:
-    stack: ${COMPOSE_PROJECT_NAME}
 
 x-app: &app
   <<: *base-app
@@ -27,23 +25,27 @@ services:
     <<: *base-app
     command: 'npm run typeorm migration:run'
     environment:
+      stack: ${COMPOSE_PROJECT_NAME}
       service: migration
 
   app:
     <<: *app
     environment:
+      stack: ${COMPOSE_PROJECT_NAME}
       service: app
 
   api_app:
     <<: *app
     command: 'node built/api/app'
     environment:
+      stack: ${COMPOSE_PROJECT_NAME}
       service: api_app
 
   webhook_app:
     <<: *app
     command: 'node built/webhooks/app'
     environment:
+      stack: ${COMPOSE_PROJECT_NAME}
       service: webhook_app
 
   cron:
@@ -52,6 +54,7 @@ services:
     command: 'crond -f -d 7'
     init: true
     environment:
+      stack: ${COMPOSE_PROJECT_NAME}
       service: cron
 
   img_upload_app:
