@@ -1,5 +1,9 @@
 version: '3.4'
 
+x-logging-env: &logging-env
+  hive_stack: ${COMPOSE_PROJECT_NAME}
+  hive_service:
+
 x-base-app: &base-app
   image: beabee/beabee:API_VERSION
   env_file:
@@ -11,7 +15,7 @@ x-base-app: &base-app
     driver: gelf
     options:
       gelf-address: "udp://127.0.0.1:12201"
-      env: stack,service
+      env: hive_stack,hive_service
 
 x-app: &app
   <<: *base-app
@@ -25,28 +29,28 @@ services:
     <<: *base-app
     command: 'npm run typeorm migration:run'
     environment:
-      stack: ${COMPOSE_PROJECT_NAME}
-      service: migration
+      <<: *logging-env
+      hive_service: migration
 
   app:
     <<: *app
     environment:
-      stack: ${COMPOSE_PROJECT_NAME}
-      service: app
+      <<: *logging-env
+      hive_service: app
 
   api_app:
     <<: *app
     command: 'node built/api/app'
     environment:
-      stack: ${COMPOSE_PROJECT_NAME}
-      service: api_app
+      <<: *logging-env
+      hive_service: api_app
 
   webhook_app:
     <<: *app
     command: 'node built/webhooks/app'
     environment:
-      stack: ${COMPOSE_PROJECT_NAME}
-      service: webhook_app
+      <<: *logging-env
+      hive_service: webhook_app
 
   cron:
     <<: *app
@@ -54,8 +58,8 @@ services:
     command: 'crond -f -d 7'
     init: true
     environment:
-      stack: ${COMPOSE_PROJECT_NAME}
-      service: cron
+      <<: *logging-env
+      hive_service: cron
 
   img_upload_app:
     image: hascheksolutions/pictshare:72394f17
